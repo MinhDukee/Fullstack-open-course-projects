@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from './services/persons'
 const Filter = (props) => {
   return(<div>
@@ -111,27 +110,28 @@ const App = () => {
           setPersons(persons.concat(returnedPersons))
           setNewNumber("")
           setNewName("")})
-          .catch(error => {
-            setClassname(
-              `error`
-            )
-            setNewMessage(
-              `Information of ${newName} has already been removed from server.`
-            )
-            setTimeout(() => {
-              setNewMessage(null)
-              setClassname(null)
-              setNewNumber("")
-          setNewName("")
-            }, 5000)
-            personsService
-            .getAll()
-            .then(initialPersons => {
-              setPersons(initialPersons)
-            })
-          }
-          
+
+        .catch(error => {
+          setClassname(
+            `error`
           )
+          setNewMessage(
+            `Validation Error: The number is not in the correct format (eg. XX(X)-XXXXX... )`
+          )
+          setTimeout(() => {
+            setNewMessage(null)
+            setClassname(null)
+            setNewNumber("")
+        setNewName("")
+          }, 5000)
+          personsService
+          .getAll()
+          .then(initialPersons => {
+            setPersons(initialPersons)
+          })
+        }
+        
+        )
 
       } } else {
       personsService
@@ -147,11 +147,33 @@ const App = () => {
           setNewMessage(null)
           setClassname(null)
         }, 5000)
+      
         setPersons(persons.concat(returnedPersons))
         setNewNumber("")
         setNewName("")
 
     })
+    .catch(error => {
+      setClassname(
+        `error`
+      )
+      setNewMessage(
+        `Validation Error: The name must be more than 3 characters or the number is not well formatted (eg. XX(X)-XXXX...).`
+      )
+      setTimeout(() => {
+        setNewMessage(null)
+        setClassname(null)
+        setNewNumber("")
+    setNewName("")
+      }, 5000)
+      personsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+    }
+      
+      )
     }
   }
 
